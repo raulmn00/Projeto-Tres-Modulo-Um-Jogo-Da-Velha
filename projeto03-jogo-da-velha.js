@@ -1,16 +1,18 @@
 const prompt = require("prompt-sync")();
 console.clear();
 
-const jogoDaVelha = [
+let jogoDaVelha = [
   [0, 0, 0],
   [0, 0, 0],
   [0, 0, 0],
 ];
-let vitoria = false;
 let vencedor;
-let jogada = 'X';
+let jogada = "X";
+let qtdVitoriasX = 0;
+let qtdVitoriasO = 0;
+let qtdPartidas = +prompt("Digite a quantidade de rodadas a serem jogadas: ");
 // Enquanto o jogo da velha estiver rodando, toda lógica acontecerá dentro do while(true){}
-while (!vitoria) {
+while (qtdPartidas != 0) {
   // Atualização das jogadas
   console.log(`É a vez do jogador ${jogada}!`);
   const linhaDesejada = +prompt("Digite a linha desejada: ");
@@ -21,12 +23,11 @@ while (!vitoria) {
     continue;
   }
 
-
   jogoDaVelha[linhaDesejada][colunaDesejada] = jogada;
-  if(jogada ==='X'){
-      jogada = 'O';
-  }else {
-      jogada = 'X';
+  if (jogada === "X") {
+    jogada = "O";
+  } else {
+    jogada = "X";
   }
   for (const valor of jogoDaVelha) {
     console.log(valor);
@@ -94,7 +95,22 @@ while (!vitoria) {
     if (qtdValoresIguais === 3) {
       vitoria = true;
       vencedor = ultimoValor;
-      break;
+      if (vencedor === "X") {
+        qtdVitoriasX++;
+        jogoDaVelha = [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ];
+      } else if (vencedor === "O") {
+        qtdVitoriasO++;
+        jogoDaVelha = [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ];
+      }
+      qtdPartidas--;
     }
     //console.log({ qtdValoresIguais });
     //console.log();
@@ -102,9 +118,12 @@ while (!vitoria) {
 }
 
 // Exibindo resultados finais;
-if (vitoria) {
-  console.log(`O jogador '${vencedor}' venceu a partida!`);
+if (qtdVitoriasO > qtdVitoriasX) {
+  console.log(`O jogador O foi o grande campeão com ${qtdVitoriasO} vitórias!`);
+} else if (qtdVitoriasO < qtdVitoriasX) {
+  console.log(`O jogador X foi o grande campeão com ${qtdVitoriasX} vitórias!`);
 } else {
-  console.log("A partida terminou em empate!");
-  prompt();
+  console.log(
+    `Os dois jogadores X e O empataram, com ${qtdVitoriasO} vitórias cada!`
+  );
 }
